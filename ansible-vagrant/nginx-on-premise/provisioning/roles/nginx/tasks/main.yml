@@ -1,0 +1,22 @@
+---
+- name: Install EPEL
+  package:
+    name: epel-release
+    state: installed
+
+- name: Install Nginx
+  package:
+    name: nginx
+    state: present
+
+- name: Copy Nginx configuration
+  template:
+    src: "templates/{{ item.tpl }}"
+    dest: "{{ item.name }}"
+  with_items: "{{ nginx_config_files }}"
+  notify: restart nginx
+
+- name: Start Nginx
+  service:
+    name: nginx
+    state: started

@@ -1,0 +1,22 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "centos/7"
+
+  # local server
+  config.vm.define "local" do |local|
+    local.vm.network "public_network"
+    local.vm.network :forwarded_port, guest: 80, host: 8080
+    local.vm.host_name = "local"
+  end
+
+  # Ansible provisioner.
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provisioning/deploy.yml"
+    ansible.inventory_path = "provisioning/inventories/local/hosts"
+  end
+
+end
