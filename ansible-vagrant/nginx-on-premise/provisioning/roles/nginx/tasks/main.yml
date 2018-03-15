@@ -11,9 +11,8 @@
 
 - name: Copy Nginx configuration
   template:
-    src: "templates/{{ item.tpl }}"
-    dest: "{{ item.name }}"
-  with_items: "{{ nginx_config_files }}"
+    src: templates/nginx.conf
+    dest: /etc/nginx/nginx.conf
   notify: restart nginx
 
 - name: Start Nginx
